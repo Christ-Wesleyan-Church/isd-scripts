@@ -1,5 +1,8 @@
 # Set an env var for the isdscripts dir
-[Environment]::SetEnvironmentVariable("ISDSCRIPTS", "$env:HOME/clouddrive/isdscripts", "Process")
+[Environment]::SetEnvironmentVariable("ISDSCRIPTS", "$env:HOME/clouddrive/isd-scripts", "Process")
+
+# Pull most recent code
+git pull $env:ISDSCRIPTS
 
 # Import general PS utilities
 Import-Module "$env:ISDSCRIPTS/PowerShell/General/ISDUtilities"
