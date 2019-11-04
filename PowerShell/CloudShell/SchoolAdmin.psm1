@@ -2,9 +2,11 @@
 function Set-SubstitutePasswords
 {
 
-    param(
-        $DryRun = $false
-    )
+    [CmdletBinding(
+        SupportsShouldProcess=$true,
+        ConfirmImpact="High"
+    )]
+    Param()
 
     $accounts = $env:SUBSTITUTEACCOUNTS.split("|")
 
@@ -17,15 +19,14 @@ function Set-SubstitutePasswords
         $password_profile.Password = $password
         $password_profile.ForceChangePasswordNextLogin = $false
 
-        $user = Get-AzureADUser -ObjectID $account
+        if ($PSCmdlet.ShouldProcess($account)) {
 
-        if ($user.Count -ne 1) 
-        {
-            throw "Couldn't find exactly one user matching '$account'. Terminating."
-        }
-
-        if ($DryRun) {
+            $user = Get-AzureADUser -ObjectID $account
+            if ($user.Count -ne 1) {
+                throw "Couldn't find exactly one user matching '$account'. Terminating."
+            }
             $user | Set-AzureADUser -PasswordProfile $password_profile
+
         }
 
         Write-Host "Email: $account"
