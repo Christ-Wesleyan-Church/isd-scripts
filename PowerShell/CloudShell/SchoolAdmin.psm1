@@ -1,6 +1,11 @@
-# Set substitute passwords of the week
+# Quickly reset all substitute passwords
 function Set-SubstitutePasswords
 {
+
+    param(
+        $DryRun = $false
+    )
+
     $accounts = $env:SUBSTITUTEACCOUNTS.split("|")
 
     Write-Host ('-'*10)
@@ -19,7 +24,9 @@ function Set-SubstitutePasswords
             throw "Couldn't find exactly one user matching '$account'. Terminating."
         }
 
-        $user | Set-AzureADUser -PasswordProfile $password_profile
+        if ($DryRun) {
+            $user | Set-AzureADUser -PasswordProfile $password_profile
+        }
 
         Write-Host "Email: $account"
         Write-Host "Password: $password"
