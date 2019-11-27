@@ -154,9 +154,7 @@ function Connect-ExchangeConditionally {
 
         if ((Test-CommandExists -Command Connect-EXOService)) {
             Connect-EXOService
-        }
-
-        if (Test-CommandExists -Command Connect-EXOPSSession) {
+        } elseif (Test-CommandExists -Command Connect-EXOPSSession) {
             Connect-EXOPSSession
         }
 
