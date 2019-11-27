@@ -1,4 +1,18 @@
-# Quickly reset all substitute passwords
+<#
+.Synopsis
+Rotates substitute passwords.
+
+.Description
+Rotates substitute passwords. Pulls list of accounts
+for which passwords should be rotated from the "SUBSTITUTEACCOUNTS"
+environment variable.
+
+.Example
+ Set-SubstitutePasswords
+
+.Example
+Set-SubstitutePasswords
+#>
 function Set-SubstitutePasswords
 {
 
