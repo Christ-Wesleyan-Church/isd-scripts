@@ -135,3 +135,72 @@ function Get-RandConsonant
 }
 
 Export-ModuleMember -Function @('Get-*', 'Set-*')
+
+<#
+.Synopsis
+Conditionally connects to Exchange Online Module.
+
+.Description
+Conditionally connects to Exchange Online. Does nothing
+if we're already connected.
+
+.Example
+Connect-ExchangeConditionally
+#>
+function Connect-ExchangeConditionally {
+
+    # Only act if Exchange commands aren't available
+    if ((Test-CommandExists -Command Get-Mailbox) -eq $false) {
+
+        if ((Test-CommandExists -Command Connect-EXOService)) {
+            Connect-EXOService
+        }
+
+        if (Test-CommandExists -Command Connect-EXOPSSession) {
+            Connect-EXOPSSession
+        }
+
+    }
+
+}
+
+Export-ModuleMember -Function Connect-ExchangeConditionally
+
+<#
+.Synopsis
+Check whether or not the specified command exists.
+
+.Description
+Checks to see whether or not the given command exists
+in the current session. Inspired by: 
+https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/
+
+.Example
+Test-CommandExists
+#>
+function Test-CommandExists {
+    Param(
+        [Parameter(Mandatory=$true,
+        ValueFromPipeline=$true)]
+        [String]
+        $Command
+    )
+
+    $oldErrPref = $ErrorActionPreference
+    $ErrorActionPreference = 'stop'
+
+    $commandExists = $null
+
+    try {
+        Get-Command $Command > $null
+        $commandExists = $true
+    } Catch {
+        $commandExists = $false
+    } Finally {
+        $ErrorActionPreference = $oldErrPref
+    }
+
+    return $commandExists
+}
+
+Export-ModuleMember -Function Test-CommandExists
