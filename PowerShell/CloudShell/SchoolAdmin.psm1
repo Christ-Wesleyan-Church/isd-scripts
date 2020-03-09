@@ -19,6 +19,8 @@ function Set-SubstitutePasswords
     )]
     Param()
 
+    Connect-AzureAD
+
     $accounts = $env:SUBSTITUTEACCOUNTS.split("|")
 
     Write-Host ('-'*10)
@@ -71,6 +73,7 @@ function Initialize-StudentEmail {
         $Email
     )
 
+    Connect-AzureAD
     Connect-ExchangeConditionally
 
     try {
